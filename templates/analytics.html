@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Pastebin{% endblock %}
+
+{% block content %}
+<div class="paste-box">
+    <h2 class="mb-4">Monthly Analytics</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Views</th>
+                    <th>Total Pastes</th>
+                    <th>Average Views per Paste</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for month_stats in analytics %}
+                <tr>
+                    <td>{{ month_stats.month.strftime('%B %Y') }}</td>
+                    <td>{{ month_stats.total_views }}</td>
+                    <td>{{ month_stats.total_pastes }}</td>
+                    <td>
+                        {% if month_stats.total_pastes > 0 %}
+                            {{ "%.2f"|format(month_stats.total_views / month_stats.total_pastes) }}
+                        {% else %}
+                            0.00
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

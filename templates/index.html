@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Create New Paste - Pastebin{% endblock %}
+
+{% block content %}
+<div class="paste-box">
+    <h2 class="mb-4">Create New Paste</h2>
+    <form id="pasteForm">
+        <div class="mb-3">
+            <textarea class="form-control" id="content" name="content" rows="10" placeholder="Enter your text here..." required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="expiration" class="form-label">Expiration Time (hours)</label>
+            <select class="form-select" id="expiration" name="expiration">
+                <option value="">Never</option>
+                <option value="1">1 hour</option>
+                <option value="24">24 hours</option>
+                <option value="168">1 week</option>
+                <option value="720">1 month</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Paste</button>
+    </form>
+    
+    <div id="result" class="mt-4" style="display: none;">
+        <div class="alert alert-success">
+            <h5>Paste Created Successfully!</h5>
+            <p>Your paste is available at: <a href="#" id="pasteUrl" target="_blank"></a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('pasteForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    
+    try {
+        const response = await fetch('/paste', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            const resultDiv = document.getElementById('result');
+            const pasteUrl = document.getElementById('pasteUrl');
+            
+            pasteUrl.href = data.url;
+            pasteUrl.textContent = data.url;
+            resultDiv.style.display = 'block';
+            
+            // Clear the form
+            e.target.reset();
+        } else {
+            alert(data.error || 'Failed to create paste');
+        }
+    } catch (error) {
+        alert('An error occurred while creating the paste');
+    }
+});
+</script>
+{% endblock %} 
