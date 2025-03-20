@@ -37,12 +37,7 @@ mysql -u root -p < init.sql
 pip install -r requirements.txt
 ```
 
-3. Configure environment variables:
-- Copy `.env.example` to `.env`
-- Update the `DATABASE_URL` with your MySQL credentials
-- Generate a new `SECRET_KEY`
-
-4. Initialize the database:
+3. Initialize the database:
 ```bash
 python app.py
 ```
