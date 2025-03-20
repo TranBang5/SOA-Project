@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}All Pastes - Pastebin{% endblock %}
+
+{% block content %}
+<div class="paste-box">
+    <h2 class="mb-4">All Available Pastes</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Created</th>
+                    <th>Expires</th>
+                    <th>Views</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paste in pastes %}
+                <tr>
+                    <td>{{ paste.id }}</td>
+                    <td>{{ paste.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</td>
+                    <td>
+                        {% if paste.expires_at %}
+                            {{ paste.expires_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </td>
+                    <td>{{ paste.views }}</td>
+                    <td>
+                        <a href="{{ url_for('view_paste', paste_id=paste.id) }}" class="btn btn-sm btn-primary">View</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No pastes available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

@@ -35,6 +35,14 @@ class Analytics(db.Model):
 def index():
     return render_template('index.html')
 
+@app.route('/pastes')
+def list_pastes():
+    # Get all non-expired pastes, ordered by creation date
+    pastes = Paste.query.filter(
+        (Paste.expires_at.is_(None)) | (Paste.expires_at > datetime.utcnow())
+    ).order_by(Paste.created_at.desc()).all()
+    return render_template('list.html', pastes=pastes)
+
 @app.route('/paste', methods=['POST'])
 def create_paste():
     content = request.form.get('content')
@@ -131,4 +139,4 @@ scheduler.start()
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True) 
+    app.run(host='0.0.0.0', port=5000, debug=True) 
